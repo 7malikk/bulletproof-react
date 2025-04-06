@@ -1,5 +1,5 @@
 import { configureAuth } from 'react-query-auth';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router';
 import { z } from 'zod';
 
 import { paths } from '@/config/paths';
@@ -35,7 +35,7 @@ export const registerInputSchema = z
     email: z.string().min(1, 'Required'),
     firstName: z.string().min(1, 'Required'),
     lastName: z.string().min(1, 'Required'),
-    password: z.string().min(1, 'Required'),
+    password: z.string().min(5, 'Required'),
   })
   .and(
     z
@@ -80,10 +80,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   if (!user.data) {
-    console.log({
-      pathname: location.pathname,
-      redirectTo: paths.auth.login.getHref(location.pathname),
-    });
     return (
       <Navigate to={paths.auth.login.getHref(location.pathname)} replace />
     );
